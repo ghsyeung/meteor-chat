@@ -1,0 +1,32 @@
+.chatroom {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  .chat-history {
+    flex: 1;
+    font-size: 1rem;
+  }
+
+  .message-box {
+    min-height: 100px;
+    display: flex;
+    align-items: stretch;
+    border: 1px solid black;
+
+    .user-input {
+      border: none;
+      flex: 1;
+      font-size: 1rem;
+    }
+
+    button {
+      width: 80px;
+    }
+  }
+}

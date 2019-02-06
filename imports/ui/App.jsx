@@ -1,13 +1,27 @@
 import React from 'react';
-import Hello from './Hello.jsx';
-import Info from './Info.jsx';
+import {Meteor} from "meteor/meteor";
+import {withTracker} from "meteor/react-meteor-data";
+import {Chats} from "../api/chats";
+import {Chatroom} from "./Chatroom";
+import {AccountsUIWrapper} from "./AccountUIWrapper";
 
-const App = () => (
-  <div>
-    <h1>Welcome to Meteor!</h1>
-    <Hello />
-    <Info />
-  </div>
-);
+const newMessage = ({alias, text}) =>
+  Chats.insert({roomId: '123', alias, createdAt: new Date(), text});
 
-export default App;
+const App_ = ({currentUser}) => {
+  return (
+    <div>
+      <AccountsUIWrapper/>
+      {currentUser
+        ? (<Chatroom userId={currentUser._id}
+                     username={currentUser.username}
+                     submitMessage={newMessage}/>)
+        : null
+      }
+    </div>
+  );
+};
+
+export const App = withTracker(() => ({
+  currentUser: Meteor.user()
+}))(App_);
