@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Meteor} from 'meteor/meteor';
 import {withTracker} from "meteor/react-meteor-data";
 import {Chats} from '../api/chats';
 import "./Chatroom.scss";
@@ -12,12 +13,12 @@ export class Chatroom_ extends Component {
   submit(event) {
     event.preventDefault();
     const d = new FormData(this.formRef.current);
-    const {submitMessage, userId, username} = this.props;
+    const {submitMessage, roomId} = this.props;
     submitMessage({
-      owner: userId,
-      alias: username,
+      roomId,
       text: d.get('message'),
     });
+    this.formRef.current.reset();
   }
 
   render() {
@@ -37,8 +38,10 @@ export class Chatroom_ extends Component {
   }
 }
 
-export const Chatroom = withTracker(() => {
+export const Chatroom = withTracker(({roomId}) => {
+  Meteor.subscribe('chats', roomId);
+  console.log("subscribing:", roomId);
   return {
-    chats: Chats.find({roomId: '123'}).fetch()
+    chats: Chats.find({roomId}).fetch()
   }
 })(Chatroom_);
